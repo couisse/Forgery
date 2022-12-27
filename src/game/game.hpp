@@ -1,9 +1,8 @@
 #ifndef GAME_HPP_INCLUDED
 #define GAME_HPP_INCLUDED
 
-#include <SFML/Graphics.hpp>
-
-#include "../utils/consts.hpp"
+#include "../render/particles/particlesManipulator.hpp"
+#include "../utils/macros.hpp"
 
 /** \brief Main class of the app
  */
@@ -13,7 +12,7 @@ class Game: public sf::RenderWindow {
 public:
     Game();
     ~Game();
-    /** \brief Main function of the app
+    /** \brief Main loop of the app
     */
     void play();
 
@@ -28,9 +27,15 @@ protected:
     */
     void manageEvents();
 
+    /** \brief calculates the next frame of the app
+     */
+    void update();
+
+
     ///attributes
     long m_tickCount;
-    sf::CircleShape m_circle;
+    sf::Clock m_clock;
+    Particles m_particles;
 
 };
 

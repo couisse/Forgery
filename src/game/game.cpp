@@ -2,19 +2,31 @@
 
 Game::Game(){
     this->create(WIN_MODE, "Forgery");
-    m_circle.setRadius(100);
-    m_circle.setFillColor(sf::Color::Green);
     m_tickCount = 0;
+    ParticleLine gen(sf::Vector2f(50,50), sf::Vector2f(0, 139), 20);
+    VertexOffset up(sf::Vector2f(0,0.1));
+    m_particles.addParticles(&gen, &up);
 }
 
 Game::~Game(){
 }
 
 void Game::play(){
+    sf::Time time;
     while (this->isOpen()){
+        m_clock.restart();
+
         this->manageEvents();
+        this->update();
         this->rendering();
+
         m_tickCount++;
+        time=m_clock.getElapsedTime();
+        if (m_tickCount%60==1){
+            log("MSPT (without capping):");
+            log((int)time.asMilliseconds());
+        }
+        sf::sleep(TIME_PER_FRAME-time);
     }
 }
 
@@ -27,8 +39,12 @@ void Game::manageEvents(){
     }
 }
 
+void Game::update(){
+    m_particles.update();
+}
+
 void Game::rendering(){
     this->clear();
-    this->draw(m_circle);
+    m_particles.render(this);
     this->display();
 }
